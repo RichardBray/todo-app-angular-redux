@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TodoDataService {
-
   public lastId: number = 0;
   public todos: Todo[] = [];
 
@@ -16,14 +15,17 @@ export class TodoDataService {
 
   // Simulate POST /todos
   addTodo(todo: Todo): TodoDataService {
-    if(!todo.id) {
+    if (!todo.id) {
       todo.id = ++this.lastId;
     }
-    this._store.dispatch({type: 'ADD_TODO', payload: {
-      id : ++this.lastId,
-      title: todo.title,
-      complete: todo.complete
-    }});
+    this._store.dispatch({
+      type: 'ADD_TODO',
+      payload: {
+        id: ++this.lastId,
+        title: todo.title,
+        complete: todo.complete
+      }
+    });
     return this;
   }
 

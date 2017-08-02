@@ -2,24 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { Store } from '@ngrx/store';
-import { reducer } from './redux/reducer';
+import { StoreModule } from '@ngrx/store';
+import { todos } from './redux/reducer';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, FormsModule, StoreModule.forRoot(todos)],
   providers: [],
-  bootstrap: [
-    AppComponent
-  ]
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor( private _store: Store<any>) {
-    _store.provideStore(reducer);
-  }
- }
+export class AppModule {}
