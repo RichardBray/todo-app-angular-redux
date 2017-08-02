@@ -1,20 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Todo } from './todo';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TodoDataService {
 
-  lastId: number = 0;
-  todos: Todo[] = [];
+  public lastId: number = 0;
+  public todos: Todo[] = [];
 
-  constructor() { }
+  constructor(private _store: Store<any>) {
+    _store.select('people').subscribe(todos => {
+      this.todos = todos;
+    });
+  }
 
   // Simulate POST /todos
   addTodo(todo: Todo): TodoDataService {
     if(!todo.id) {
       todo.id = ++this.lastId;
     }
-    this.todos.push(todo);
+    this._store.dispatch({type: 'ADD_TODO', payload: {
+      id : ++this.lastId,
+      title: todo.title,
+      complete: todo.complete
+    }});
     return this;
   }
 
