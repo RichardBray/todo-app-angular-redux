@@ -37,9 +37,7 @@ export class TodoDataService {
   public toggleTodoComplete(todoId: number): void {
     this._store.dispatch({
       type: 'TOGGLE_COMPLETE',
-      payload: {
-        id: todoId
-      }
+      payload: { id: todoId }
     });
   }
 
