@@ -1,7 +1,6 @@
 import { Todo } from './todo';
 import { Component } from '@angular/core';
 import { TodoDataService } from './todo-data.service';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-root',
@@ -9,34 +8,31 @@ import { Store } from '@ngrx/store';
   providers: [TodoDataService]
 })
 export class AppComponent {
-  newTodo: Todo = new Todo();
+  public newTodo: Todo = new Todo();
 
-  constructor(
-    private _store: Store<any>,
-    private _todoDataService: TodoDataService
-  ) {}
+  constructor(private _todoDataService: TodoDataService) {}
 
-  addTodo(): void {
+  public addTodo(): void {
     this._todoDataService.addTodo(this.newTodo);
-    this.newTodo = new Todo();
   }
 
-  toggleTodoComplete(todo): void {
-    this._todoDataService.toggleTodoComplete(todo);
+  public toggleTodoComplete({ id }): void {
+    this._todoDataService.toggleTodoComplete(id);
   }
 
-  removeTodo(todo): void {
-    this._todoDataService.deleteTodoById(todo.id);
+  public removeTodo({ id }): void {
+    this._todoDataService.deleteTodoById(id);
   }
 
-  allTodos(): number {
+  public allTodos(): number {
     return this.incompleteTodos.length + this.completeTodos.length;
   }
-  get incompleteTodos(): Array<Todo> {
+
+  public get incompleteTodos(): Array<Todo> {
     return this._todoDataService.getIncompleteTodos();
   }
 
-  get completeTodos(): Array<Todo> {
+  public get completeTodos(): Array<Todo> {
     return this._todoDataService.getCompleteTodos();
   }
 }

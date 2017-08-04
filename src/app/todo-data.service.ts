@@ -8,16 +8,15 @@ export class TodoDataService {
   public todos: Todo[] = [];
 
   constructor(private _store: Store<any>) {
-    _store.select('people').subscribe(todos => {
+    // To gain access to todos in the store put the 'todos' reducer
+    // assign todos that we get to our local todos variable
+    // unless todo is updated don;t emit a new value
+    _store.select('todos').subscribe(todos => {
       this.todos = todos;
     });
   }
 
-  // Simulate POST /todos
-  addTodo(todo: Todo): TodoDataService {
-    if (!todo.id) {
-      todo.id = ++this.lastId;
-    }
+  public addTodo(todo: Todo): void {
     this._store.dispatch({
       type: 'ADD_TODO',
       payload: {
@@ -26,42 +25,29 @@ export class TodoDataService {
         complete: todo.complete
       }
     });
-    return this;
   }
 
-  // Simulate DELETE /todos/:id
-  deleteTodoById(id: number): TodoDataService {
-    this.todos = this.todos.filter(todo => todo.id !== id);
-    return this;
-  }
-
-  toggleTodoComplete(todo: Todo) {
-    let updatedTodo = this.updateTodoById(todo.id, {
-      complete: !todo.complete
+  public deleteTodoById(todoId: number): void {
+    this._store.dispatch({
+      type: 'REMOVE_TODO',
+      payload: { id: todoId }
     });
-    return updatedTodo;
   }
 
-  // Simulate PUT /todos/:id
-  updateTodoById(id: number, values: Object = {}): Todo {
-    let todo = this.getTodoById(id);
-    if (!todo) {
-      return null;
-    }
-    Object.assign(todo, values);
-    return todo;
+  public toggleTodoComplete(todoId: number): void {
+    this._store.dispatch({
+      type: 'TOGGLE_COMPLETE',
+      payload: {
+        id: todoId
+      }
+    });
   }
 
-  getCompleteTodos(): Todo[] {
+  public getCompleteTodos(): Todo[] {
     return this.todos.filter(todo => todo.complete === true);
   }
 
-  getIncompleteTodos(): Todo[] {
+  public getIncompleteTodos(): Todo[] {
     return this.todos.filter(todo => todo.complete === false);
-  }
-
-  // Simulate GET /todos/:id
-  getTodoById(id: number): Todo {
-    return this.todos.filter(todo => todo.id === id).pop();
   }
 }

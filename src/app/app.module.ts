@@ -7,8 +7,10 @@ import { todos } from './redux/reducer';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, FormsModule, StoreModule.forRoot(todos)],
+  imports: [BrowserModule, FormsModule, StoreModule.forRoot({ todos })],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
+// providSotre, object map of reducer functions
